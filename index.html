@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Traditional Sinhala Oil Lamp Ceremony</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
+    <div class="lamp-ceremony">
+      <div class="ceremony-title text-center mb-4">
+        <h1 class="ceremony-heading">Traditional Oil Lamp Lighting Ceremony</h1>
+        <p class="ceremony-subtitle">Touch a wick to light the flame, or auto light the rest</p>
+      </div>
+
+      <div class="main-lamp-container" id="lampContainer">
+        <div class="lamp-wrapper">
+          <img src="images/sinhala-oil-lamp.png" alt="Traditional Sinhala Oil Lamp" class="main-lamp-image" id="mainLamp"/>
+
+          <!-- Ten wick points with individual CSS variables for positions -->
+          <div class="wick-point" data-wick="1"><div class="flame-animation"></div><div class="wick-glow"></div></div>
+          <div class="wick-point" data-wick="2"><div class="flame-animation"></div><div class="wick-glow"></div></div>
+          <div class="wick-point" data-wick="3"><div class="flame-animation"></div><div class="wick-glow"></div></div>
+          <div class="wick-point" data-wick="4"><div class="flame-animation"></div><div class="wick-glow"></div></div>
+          <div class="wick-point" data-wick="5"><div class="flame-animation"></div><div class="wick-glow"></div></div>
+          <div class="wick-point" data-wick="6"><div class="flame-animation"></div><div class="wick-glow"></div></div>
+          <div class="wick-point" data-wick="7"><div class="flame-animation"></div><div class="wick-glow"></div></div>
+          <div class="wick-point" data-wick="8"><div class="flame-animation"></div><div class="wick-glow"></div></div>
+          <div class="wick-point" data-wick="9"><div class="flame-animation"></div><div class="wick-glow"></div></div>
+          <div class="wick-point" data-wick="10"><div class="flame-animation"></div><div class="wick-glow"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Collapsible Control Panel -->
+  <div class="collapsible-controls">
+    <!-- Hamburger Menu Button -->
+    <button class="hamburger-btn" id="hamburgerBtn">
+      <div class="hamburger-icon">
+        <span class="bar bar1"></span>
+        <span class="bar bar2"></span>
+        <span class="bar bar3"></span>
+      </div>
+    </button>
+
+    <!-- Control Panel (Hidden by default) -->
+    <div class="control-panel-collapsible" id="controlPanel">
+      <div class="control-panel-content">
+        <div class="d-flex flex-column gap-2">
+          <button class="btn btn-sm btn-warning" id="resetBtn">Reset All</button>
+          <button class="btn btn-sm btn-success" id="autoLightBtn">Auto Light Remaining</button>
+          <button class="btn btn-sm btn-info" id="calibrateBtn">Calibrate Positions</button>
+        </div>
+        <div class="lighting-progress mt-3">
+          <span class="progress-text">Lit: <span id="progress-count">0</span>/10</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calibration Modal -->
+  <div class="calibration-modal" id="calibrationModal">
+    <div class="calibration-overlay" id="calibrationOverlay"></div>
+    <div class="calibration-panel">
+      <div class="calibration-header">
+        <h3>Wick Position Calibration</h3>
+        <button class="calibration-close" id="calibrationClose">×</button>
+      </div>
+      <div class="calibration-body">
+        <div class="wick-selector mb-3">
+          <label>Select Wick:</label>
+          <div class="wick-buttons">
+            <button class="wick-select-btn active" data-wick="1">1</button>
+            <button class="wick-select-btn" data-wick="2">2</button>
+            <button class="wick-select-btn" data-wick="3">3</button>
+            <button class="wick-select-btn" data-wick="4">4</button>
+            <button class="wick-select-btn" data-wick="5">5</button>
+            <button class="wick-select-btn" data-wick="6">6</button>
+            <button class="wick-select-btn" data-wick="7">7</button>
+            <button class="wick-select-btn" data-wick="8">8</button>
+            <button class="wick-select-btn" data-wick="9">9</button>
+            <button class="wick-select-btn" data-wick="10">10</button>
+          </div>
+        </div>
+        
+        <div class="position-controls">
+          <div class="slider-group mb-3">
+            <label for="xSlider">X Position: <span id="xValue">39%</span></label>
+            <input type="range" id="xSlider" min="0" max="100" step="0.5" value="39" class="slider">
+          </div>
+          <div class="slider-group mb-3">
+            <label for="ySlider">Y Position: <span id="yValue">20%</span></label>
+            <input type="range" id="ySlider" min="0" max="100" step="0.5" value="20" class="slider">
+          </div>
+          <div class="slider-group mb-3">
+            <label for="xOffsetSlider">X Offset: <span id="xOffsetValue">19px</span></label>
+            <input type="range" id="xOffsetSlider" min="-50" max="50" step="1" value="19" class="slider">
+          </div>
+          <div class="slider-group mb-3">
+            <label for="yOffsetSlider">Y Offset: <span id="yOffsetValue">19px</span></label>
+            <input type="range" id="yOffsetSlider" min="-50" max="50" step="1" value="19" class="slider">
+          </div>
+        </div>
+
+        <div class="calibration-actions mt-4">
+          <button class="btn btn-sm btn-secondary" id="resetCurrentWick">Reset Current Wick</button>
+          <button class="btn btn-sm btn-warning" id="resetAllPositions">Reset All Positions</button>
+          <button class="btn btn-sm btn-success" id="savePositions">Save & Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="bell-sound" preload="auto">
+    <source src="sounds/bell.mp3" type="audio/mpeg"/>
+  </audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
