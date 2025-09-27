@@ -7,6 +7,11 @@ let isCalibrating = false;
 let currentSelectedWick = 1;
 let controlsVisible = false;
 
+// Music control variables
+let backgroundMusic = null;
+let musicStopTimer = null;
+let isMusicPlaying = false;
+
 // Default positions
 const defaultPositions = {
   1: { x: 39, y: 20 }, 2: { x: 55, y: 20 }, 3: { x: 35, y: 32 }, 4: { x: 59, y: 32 }, 5: { x: 32, y: 46 },
@@ -19,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupTouchHandling();
   loadSavedStates();
   preloadAudio();
+  setupBackgroundMusic();
   updateProgressDisplay();
   updateCeremonyStatus();
   loadSavedPositions();
@@ -37,6 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('resetBtn')?.addEventListener('click', resetAllWicks);
   document.getElementById('autoLightBtn')?.addEventListener('click', autoLightRemaining);
   document.getElementById('calibrateBtn')?.addEventListener('click', openCalibration);
+
+  // Music controls
+  document.getElementById('startMusicBtn')?.addEventListener('click', startBackgroundMusic);
+  document.getElementById('stopMusicBtn')?.addEventListener('click', stopBackgroundMusic);
 
   // Calibration controls
   document.getElementById('calibrationClose')?.addEventListener('click', closeCalibration);
@@ -64,6 +74,54 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// ===== BACKGROUND MUSIC CONTROL =====
+function setupBackgroundMusic() {
+  backgroundMusic = document.getElementById('background-music');
+  if (backgroundMusic) {
+    backgroundMusic.volume = 0.3; // Set volume to 30%
+    backgroundMusic.addEventListener('ended', () => {
+      // This shouldn't trigger with loop=true, but just in case
+      if (isMusicPlaying) {
+        backgroundMusic.currentTime = 0;
+        backgroundMusic.play().catch(console.log);
+      }
+    });
+  }
+}
+
+function startBackgroundMusic() {
+  if (backgroundMusic && !isMusicPlaying) {
+    backgroundMusic.currentTime = 0;
+    backgroundMusic.play().then(() => {
+      isMusicPlaying = true;
+      console.log('🎵 Background music started');
+    }).catch(err => {
+      console.log('Music play failed:', err);
+    });
+  }
+}
+
+function stopBackgroundMusic() {
+  if (backgroundMusic && isMusicPlaying) {
+    backgroundMusic.pause();
+    backgroundMusic.currentTime = 0;
+    isMusicPlaying = false;
+    clearTimeout(musicStopTimer);
+    console.log('🔇 Background music stopped');
+  }
+}
+
+function scheduleAutoMusicStop() {
+  // Auto-stop music 10 seconds after all wicks are lit
+  if (isMusicPlaying) {
+    clearTimeout(musicStopTimer);
+    musicStopTimer = setTimeout(() => {
+      stopBackgroundMusic();
+      console.log('🔇 Background music auto-stopped after ceremony completion');
+    }, 10000); // 10 seconds
+  }
+}
 
 // ===== HAMBURGER MENU CONTROLS =====
 function toggleControlPanel() {
@@ -168,6 +226,9 @@ function updateCeremonyStatus(){
   if (lit === 10){
     container.style.animation = 'ceremonyLighting 1800ms ease-in-out';
     setTimeout(()=>{ container.style.animation=''; }, 1850);
+    
+    // Schedule auto music stop when all wicks are lit
+    scheduleAutoMusicStop();
   }
 }
 
@@ -211,10 +272,16 @@ async function autoLightRemaining(){
 }
 function sleep(ms){ return new Promise(res => setTimeout(res, ms)); }
 
-function preloadAudio(){ const a = document.getElementById('bell-sound'); if (a) a.load(); }
+function preloadAudio(){ 
+  const a = document.getElementById('bell-sound'); 
+  if (a) a.load(); 
+}
 function playBellSound(){
-  const a = document.getElementById('bell-sound'); if (!a) return;
-  a.currentTime = 0; a.volume = .6; a.play().catch(()=>{});
+  const a = document.getElementById('bell-sound'); 
+  if (!a) return;
+  a.currentTime = 0; 
+  a.volume = .6; 
+  a.play().catch(()=>{});
 }
 
 function saveStates(){
@@ -253,6 +320,8 @@ document.addEventListener('keydown', e => {
   else if (e.key.toLowerCase()==='a') autoLightRemaining();
   else if (e.key.toLowerCase()==='c') openCalibration();
   else if (e.key.toLowerCase()==='m') toggleControlPanel();
+  else if (e.key.toLowerCase()==='s') startBackgroundMusic();
+  else if (e.key.toLowerCase()==='x') stopBackgroundMusic();
 });
 document.addEventListener('keydown', e => {
   if (e.key === 'F11'){
@@ -270,6 +339,9 @@ function resetAllWicks(){
   setGlowByLitCount();
   saveStates();
   hideControlPanel();
+  
+  // Clear any pending auto music stop
+  clearTimeout(musicStopTimer);
 }
 
 function applyPercentagePositionsOnce(){}

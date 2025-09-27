@@ -50,6 +50,13 @@
     <div class="control-panel-collapsible" id="controlPanel">
       <div class="control-panel-content">
         <div class="d-flex flex-column gap-2">
+          <!-- Music Controls -->
+          <div class="music-controls mb-2">
+            <button class="btn btn-sm btn-primary" id="startMusicBtn">🎵 Start Music</button>
+            <button class="btn btn-sm btn-secondary" id="stopMusicBtn">🔇 Stop Music</button>
+          </div>
+          
+          <!-- Lamp Controls -->
           <button class="btn btn-sm btn-warning" id="resetBtn">Reset All</button>
           <button class="btn btn-sm btn-success" id="autoLightBtn">Auto Light Remaining</button>
           <button class="btn btn-sm btn-info" id="calibrateBtn">Calibrate Positions</button>
@@ -114,8 +121,14 @@
     </div>
   </div>
 
+  <!-- Audio Elements -->
   <audio id="bell-sound" preload="auto">
     <source src="sounds/bell.mp3" type="audio/mpeg"/>
+  </audio>
+  
+  <!-- Background Music -->
+  <audio id="background-music" preload="auto" loop>
+    <source src="sounds/background-music.mp3" type="audio/mpeg"/>
   </audio>
 
   <script src="script.js"></script>
