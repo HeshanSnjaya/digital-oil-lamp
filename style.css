@@ -241,7 +241,7 @@ body::before {
   position: absolute;
   bottom: 80px;
   left: 0;
-  width: 200px;
+  width: 220px;
   background: rgba(0,0,0,.9);
   border-radius: 15px;
   backdrop-filter: blur(20px);
@@ -266,6 +266,21 @@ body::before {
 .control-panel-content {
   padding: 20px;
 }
+
+/* Music Controls */
+.music-controls {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid rgba(255,165,0,.2);
+  padding-bottom: 12px;
+  margin-bottom: 12px !important;
+}
+.music-controls .btn {
+  flex: 1;
+  font-size: .8rem;
+  padding: 8px 12px;
+}
+
 .control-panel-collapsible .btn {
   width: 100%;
   font-size: .85rem;
@@ -464,8 +479,10 @@ body::before {
   .wick-point { width: 36px; height: 36px; }
   .calibration-panel { width: 95vw; }
   .wick-buttons { grid-template-columns: repeat(5, 1fr); }
-  .control-panel-collapsible { width: 180px; }
+  .control-panel-collapsible { width: 200px; }
   .hamburger-btn { width: 55px; height: 55px; }
+  .music-controls { flex-direction: column; }
+  .music-controls .btn { font-size: .75rem; }
 }
 
 /* Disable selection and scrolling for kiosk/smartboard */
